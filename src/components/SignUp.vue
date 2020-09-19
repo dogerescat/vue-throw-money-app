@@ -8,7 +8,7 @@
         </tr>
         <tr>
             <td>メールアドレス</td>
-            <td><input type="text" placeholder="email" v-model="email" /> </td>
+            <td><input type="email" placeholder="email" v-model="email" /> </td>
         </tr>
         <tr>
             <td>パスワード</td>
@@ -19,7 +19,6 @@
   </div>
 </template>
 <script>
-import firebase from 'firebase'
 
 export default {
   name: 'SignUp',
@@ -32,15 +31,22 @@ export default {
   },
   methods: {
       signUp(){
-          firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-          .catch(error => {
-              alert(error.message)
-          })
+        if (this.username !== '' && this.email !== '' && this.password !== '') {
+          this.$store.dispatch('signUp', { email: this.email, password: this.password})
+          this.username = ''
+          this.email = ''
+          this. password = ''
+        } else {
+          alert('全て入力してください')
+        }
       }
   }
 };
 </script>
 <style>
+table {
+  margin: 0 auto;
+}
 button {
     color: rgb(44, 153, 172);
     background-color: white;
