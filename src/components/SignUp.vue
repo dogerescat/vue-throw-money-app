@@ -16,6 +16,7 @@
         </tr>
     </table>
     <button type="button" value="新規登録" @click="signUp" >新規登録</button>
+    <router-link to='/signin' class="router">ログインはこちらから</router-link>
   </div>
 </template>
 <script>
@@ -55,5 +56,8 @@ button {
     border: solid 1px rgb(44, 153, 172);
     border-radius: 10%;
     font-size: 1.2em;
+}
+.router {
+  display: block;
 }
 </style>

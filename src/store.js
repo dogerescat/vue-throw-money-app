@@ -19,12 +19,23 @@ const store = new Vuex.Store({
         .auth()
         .createUserWithEmailAndPassword(authData.email, authData.password)
         .then((res) => {
-            commit('updateUserId', res.uid)
+          commit('updateUserId', res.user.uid)
         })
         .catch((error) => {
           alert(error.message);
         });
     },
+    signIn( { commit }, authData ) {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(authData.email, authData.password)
+        .then((res) => {
+          commit('updateUserId', res.user.uid)
+        })
+        .catch((error) => {
+          alert(error.message)
+        })
+    }
   },
 });
 
