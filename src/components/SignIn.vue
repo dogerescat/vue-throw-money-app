@@ -26,12 +26,12 @@ export default {
     },
     methods: {
         signIn(){
-            if (this.email !== '' && this.password !== '') {
+            if (this.email === '' || this.password === '') {
+                alert('全て入力してください')
+            } else {
                 this.$store.dispatch('signIn', { email: this.email, password: this.password})
                 this.email = ''
                 this.password = ''
-            } else {
-                alert('全て入力してください')
             }
         }
     }
