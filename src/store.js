@@ -6,36 +6,64 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-      userId: null
+    user: {
+      name: '',
+      wallet: 0,
+    },
   },
   mutations: {
-      updateUserId(state, userId){
-          state.userId = userId
-      }
+    getUserInfo(state, user) {
+      state.user.name = user.name;
+      state.user.wallet = user.wallet;
+    },
   },
   actions: {
-    signUp( {commit}, authData ) {
+    signUp({ commit }, authData) {
+      const firstUserData = {
+        name: authData.username,
+        wallet: 0
+      }
       firebase
         .auth()
         .createUserWithEmailAndPassword(authData.email, authData.password)
         .then((res) => {
-          commit('updateUserId', res.user.uid)
+          firebase
+            .firestore()
+            .collection('users')
+            .doc(res.user.uid)
+            .set(firstUserData)
+            .then(() => {
+              commit('getUserInfo',firstUserData);
+            })
+            .catch((error) => {
+              console.log(error.message)
+            })
         })
         .catch((error) => {
           alert(error.message);
         });
     },
-    signIn( { commit }, authData ) {
+    signIn({ dispatch }, authData) {
       firebase
         .auth()
         .signInWithEmailAndPassword(authData.email, authData.password)
         .then((res) => {
-          commit('updateUserId', res.user.uid)
+          dispatch('getUserInfo', res.user);
         })
         .catch((error) => {
-          alert(error.message)
-        })
-    }
+          alert(error.message);
+        });
+    },
+    getUserInfo({ commit }, user) {
+      firebase
+        .firestore()
+        .collection('users')
+        .doc(user.uid)
+        .get()
+        .then((res) => {
+          commit('getUserInfo', res.data());
+        });
+    },
   },
 });
 

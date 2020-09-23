@@ -18,6 +18,11 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+   store.dispatch('getUserInfo', user) 
+  } 
+})
 
 new Vue({
   store,  
