@@ -2,6 +2,7 @@
   <div id="dashboard">
     <header>
       <p class="name">{{userName}}さんようこそ！</p>
+      <button class="signout" @click="signOut">ログアウト</button>
       <p class="wallet">残高：{{userWallet}}</p>
     </header>
     <h1>ユーザー一覧</h1>
@@ -10,6 +11,11 @@
 <script>
 export default {
   name: 'Dashboard',
+  methods: {
+    signOut(){
+      this.$store.dispatch('signOut');
+    }
+  },
   computed: {
     userName() {
       return this.$store.state.user.name;
@@ -26,10 +32,16 @@ header {
 }
 .name {
   float: left;
-  margin-left: 20px;
+  margin-left: 16px;
 }
 .wallet {
   float: right;
-  margin-right: 20px;
+  margin-right: 16px;
+}
+.signout {
+  float: right;
+  margin: 16px;
+  padding: 5px;
+  font-size: 0.8em;
 }
 </style>

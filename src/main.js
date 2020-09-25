@@ -19,6 +19,7 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 firebase.auth().onAuthStateChanged((user) => {
+  store.commit('switchAuth', user);
   if (user) {
     store.dispatch('getUserInfo', user);
   }

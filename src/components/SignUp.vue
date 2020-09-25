@@ -34,10 +34,9 @@ export default {
       signUp(){
         if (this.username !== '' && this.email !== '' && this.password !== '') {
           this.$store.dispatch('signUp', { username: this.username, email: this.email, password: this.password});
-          this.$router.push('/dashboard')
-          this.username = ''
-          this.email = ''
-          this. password = ''
+          this.username = '';
+          this.email = '';
+          this. password = '';
         } else {
           alert('全て入力してください');
         }
@@ -57,6 +56,10 @@ button {
     border: solid 1px rgb(44, 153, 172);
     border-radius: 10%;
     font-size: 1.2em;
+}
+button:hover {
+  color: white;
+  background-color: rgb(44, 153, 172);
 }
 .router {
   display: block;
