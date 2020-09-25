@@ -21,8 +21,8 @@ const store = new Vuex.Store({
     signUp({ commit }, authData) {
       const firstUserData = {
         name: authData.username,
-        wallet: 0
-      }
+        wallet: 0,
+      };
       firebase
         .auth()
         .createUserWithEmailAndPassword(authData.email, authData.password)
@@ -33,11 +33,11 @@ const store = new Vuex.Store({
             .doc(res.user.uid)
             .set(firstUserData)
             .then(() => {
-              commit('getUserInfo',firstUserData);
+              commit('getUserInfo', firstUserData);
             })
             .catch((error) => {
-              console.log(error.message)
-            })
+              console.log(error.message);
+            });
         })
         .catch((error) => {
           alert(error.message);

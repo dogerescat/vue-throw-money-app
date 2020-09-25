@@ -33,13 +33,13 @@ export default {
   methods: {
       signUp(){
         if (this.username !== '' && this.email !== '' && this.password !== '') {
-          this.$store.dispatch('signUp', { username: this.username, email: this.email, password: this.password})
+          this.$store.dispatch('signUp', { username: this.username, email: this.email, password: this.password});
           this.$router.push('/dashboard')
           this.username = ''
           this.email = ''
           this. password = ''
         } else {
-          alert('全て入力してください')
+          alert('全て入力してください');
         }
       }
   }
