@@ -25,6 +25,10 @@ const store = new Vuex.Store({
         state.user.auth = true;
       }
     },
+    deleteUserInfo(state) {
+      state.user.name = '';
+      state.user.wallet = 0;
+    },
   },
   actions: {
     signUp({ commit }, authData) {
@@ -43,10 +47,9 @@ const store = new Vuex.Store({
             .set(firstUserData)
             .then(() => {
               commit('getUserInfo', firstUserData);
-              router.push('/dashboard')
-              .catch((error) => {
+              router.push('/dashboard').catch((error) => {
                 console.log(error);
-              });    
+              });
             })
             .catch((error) => {
               console.log(error.message);
@@ -67,13 +70,13 @@ const store = new Vuex.Store({
           alert(error.message);
         });
     },
-    signOut() {
+    signOut({ commit }) {
       firebase
         .auth()
         .signOut()
         .then(() => {
-          router.push('/signin')
-          .catch((error) => {
+          commit('deleteUserInfo');
+          router.push('/signin').catch((error) => {
             console.log(error);
           });
         })
@@ -89,8 +92,7 @@ const store = new Vuex.Store({
         .get()
         .then((res) => {
           commit('getUserInfo', res.data());
-          router.push('/dashboard')
-          .catch((error) => {
+          router.push('/dashboard').catch((error) => {
             console.log(error);
           });
         });
