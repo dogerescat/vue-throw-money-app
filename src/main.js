@@ -22,6 +22,7 @@ firebase.auth().onAuthStateChanged((user) => {
   store.commit('switchAuth', user);
   if (user) {
     store.dispatch('getUserInfo', user);
+    store.dispatch('getOtherUsersInfo',user);
   }
 });
 

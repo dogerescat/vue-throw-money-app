@@ -12,6 +12,7 @@ const store = new Vuex.Store({
       wallet: 0,
       auth: false,
     },
+    otherUsers: [],
   },
   mutations: {
     getUserInfo(state, user) {
@@ -28,6 +29,13 @@ const store = new Vuex.Store({
     deleteUserInfo(state) {
       state.user.name = '';
       state.user.wallet = 0;
+    },
+    getOtherUsersInfo(state, otherUser) {
+      state.otherUsers.push(otherUser);
+      console.log(state.otherUsers);
+    },
+    deleteOtherUsersInfo(state) {
+      state.otherUsers = [];
     },
   },
   actions: {
@@ -76,6 +84,7 @@ const store = new Vuex.Store({
         .signOut()
         .then(() => {
           commit('deleteUserInfo');
+          commit('deleteOtherUsersInfo');
           router.push('/signin').catch((error) => {
             console.log(error);
           });
@@ -94,6 +103,19 @@ const store = new Vuex.Store({
           commit('getUserInfo', res.data());
           router.push('/dashboard').catch((error) => {
             console.log(error);
+          });
+        });
+    },
+    getOtherUsersInfo({ commit }, user) {
+      firebase
+        .firestore()
+        .collection('users')
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            if (doc.id !== user.uid) {
+              commit('getOtherUsersInfo', doc.data());
+            }
           });
         });
     },
