@@ -11,6 +11,7 @@ const store = new Vuex.Store({
       name: '',
       wallet: 0,
       auth: false,
+      uid: '',
     },
     otherUsers: [],
   },
@@ -18,6 +19,7 @@ const store = new Vuex.Store({
     getUserInfo(state, user) {
       state.user.name = user.name;
       state.user.wallet = user.wallet;
+      state.user.uid = user.uid;
     },
     switchAuth(state, result) {
       if (!result) {
@@ -29,25 +31,32 @@ const store = new Vuex.Store({
     deleteUserInfo(state) {
       state.user.name = '';
       state.user.wallet = 0;
+      state.user.uid = '';
     },
     getOtherUsersInfo(state, otherUser) {
       state.otherUsers.push(otherUser);
-      console.log(state.otherUsers);
     },
     deleteOtherUsersInfo(state) {
       state.otherUsers = [];
+    },
+    updateOtherUserWallet(state, payload) {
+      state.otherUsers[payload.index].wallet = payload.money;
+    },
+    updateUserWallet(state, payload) {
+      state.user.wallet = payload.money;
     },
   },
   actions: {
     signUp({ commit }, authData) {
       const firstUserData = {
         name: authData.username,
-        wallet: 0,
+        wallet: 500,
       };
       firebase
         .auth()
         .createUserWithEmailAndPassword(authData.email, authData.password)
         .then((res) => {
+          firstUserData.uid = res.user.uid;
           firebase
             .firestore()
             .collection('users')
@@ -117,6 +126,30 @@ const store = new Vuex.Store({
               commit('getOtherUsersInfo', doc.data());
             }
           });
+        });
+    },
+    updateOtherUserWallet({ commit }, payload) {
+      firebase
+        .firestore()
+        .collection('users')
+        .doc(payload.uid)
+        .update({
+          wallet: payload.money,
+        })
+        .then(() => {
+          commit('updateOtherUserWallet', payload);
+        });
+    },
+    updateUserWallet({ commit }, payload) {
+      firebase
+        .firestore()
+        .collection('users')
+        .doc(payload.uid)
+        .update({
+          wallet: payload.money,
+        })
+        .then(() => {
+          commit('updateUserWallet', payload);
         });
     },
   },

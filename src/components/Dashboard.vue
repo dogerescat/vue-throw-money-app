@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard" :class="{'on-wallet': otherWallet}">
+  <div id="dashboard" :class="{'on-wallet': otherWallet, 'on-money-transfer': moneyTransfer}">
     <header>
       <p class="name">{{userName}}さんようこそ！</p>
       <button class="signout" @click="signOut">ログアウト</button>
@@ -13,17 +13,21 @@
         </tr>
         <tr v-for="(user,index) in otherUsers" :key=index>
           <td class="other-user-name">{{user.name}}</td>
-          <td class="other-user-button"><button @click="getIndex(index)">walletを見る</button><button>送る</button></td>
+          <td class="other-user-button"><button @click="getWalletIndex(index)">walletを見る</button><button @click="getTransferIndex(index)">送る</button></td>
         </tr>
       </table>
     </div>
   <transition name="slide">
-    <Wallet v-if="otherWallet" :index="index" @close-wallet="switchWalletData"/>
+      <Wallet v-if="otherWallet" :index="index" @close-wallet="switchWalletData"/>
+  </transition>
+  <transition name="slide">
+      <MoneyTransfer v-if="moneyTransfer" :index="index" @close-transfer-money="switchTransferData"/>
   </transition>
   </div>
 </template>
 <script>
 import Wallet from './Wallet';
+import MoneyTransfer from './MoneyTransfer';
 
 export default {
   name: 'Dashboard',
@@ -31,14 +35,15 @@ export default {
     return {
       index: 0,
       isWallet: false,
+      isMoneyTransfer: false,
     };
   },
-  components: { Wallet },
+  components: { Wallet, MoneyTransfer },
   methods: {
     signOut() {
       this.$store.dispatch('signOut');
     },
-    getIndex(index) {
+    getWalletIndex(index) {
       this.index = index;
       this.switchWalletData();
     },
@@ -47,6 +52,17 @@ export default {
         this.isWallet = true;
       } else {
         this.isWallet = false;
+      }
+    },
+    getTransferIndex(index) {
+      this.index = index;
+      this.switchTransferData();
+    },
+    switchTransferData() {
+      if (this.isMoneyTransfer) {
+        this.isMoneyTransfer = false;
+      } else {
+        this.isMoneyTransfer = true;
       }
     }
   },
@@ -63,6 +79,9 @@ export default {
     otherWallet() {
       return this.isWallet;
     },
+    moneyTransfer(){
+      return this.isMoneyTransfer;
+    }
   },
 };
 </script>
@@ -126,7 +145,8 @@ header {
     opacity: 0;
   }
 }
-.on-wallet::before {
+.on-wallet::before,
+.on-money-transfer::before {
   content: "";
   position: absolute;
   top: 0;
