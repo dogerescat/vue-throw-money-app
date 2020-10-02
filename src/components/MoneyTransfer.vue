@@ -63,10 +63,10 @@ export default {
       this.calculateOtherUserMoney();
     },
     setOtherUserUid() {
-      this.otherUserUid = this.getOtherUserUid;
+      this.otherUserUid = this.computedOtherUserUid;
     },
     setUserUid() {
-      this.userUid = this.getUserUid;
+      this.userUid = this.computedUserUid;
     },
     setUid() {
       this.setUserUid();
@@ -80,10 +80,10 @@ export default {
     otherUserWallet() {
       return this.$store.state.otherUsers[this.index].wallet;
     },
-    getOtherUserUid() {
+    computedOtherUserUid() {
       return this.$store.state.otherUsers[this.index].uid;
     },
-    getUserUid() {
+    computedUserUid() {
       return this.$store.state.user.uid;
     },
   },

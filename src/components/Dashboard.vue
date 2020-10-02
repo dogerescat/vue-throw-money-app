@@ -48,22 +48,14 @@ export default {
       this.switchWalletData();
     },
     switchWalletData() {
-      if (this.isWallet === false) {
-        this.isWallet = true;
-      } else {
-        this.isWallet = false;
-      }
+      this.isWallet = !this.isWallet;
     },
     getTransferIndex(index) {
       this.index = index;
       this.switchTransferData();
     },
     switchTransferData() {
-      if (this.isMoneyTransfer) {
-        this.isMoneyTransfer = false;
-      } else {
-        this.isMoneyTransfer = true;
-      }
+      this.isMoneyTransfer = !this.isMoneyTransfer;
     }
   },
   computed: {
